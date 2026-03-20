@@ -13,9 +13,14 @@ public class PlayerSkillController : MonoBehaviour
     [Header("Bomb")]
     public GameObject bombPrefab;
     public Transform bombSpawnPoint;
+    [SerializeField] private float throwDelay = 0.3f;
+
+    private float lastThrowTime;
 
     private bool isPowerActive;
     private bool isShieldActive;
+
+    private int readyBombs = 0;
 
     private void Awake()
     {
@@ -73,30 +78,35 @@ public class PlayerSkillController : MonoBehaviour
     IEnumerator ShieldSkill()
     {
         isShieldActive = true;
-        armorObject.SetActive(true);
+
+        if (armorObject != null)
+            armorObject.SetActive(true);
 
         yield return new WaitForSeconds(5f);
 
-        armorObject.SetActive(false);
+        if (armorObject != null)
+            armorObject.SetActive(false);
+
         isShieldActive = false;
     }
 
     public bool IsShieldActive() => isShieldActive;
 
-    private bool hasBomb = false;
-
     public void UseBomb()
     {
         if (!SkillManager.Instance.UseSkill("Bomb")) return;
 
-        hasBomb = true;
+        readyBombs++;
     }
 
     public void ThrowBomb()
     {
-        if (!hasBomb) return;
+        if (readyBombs <= 0) return;
 
-        hasBomb = false;
+        if (Time.time - lastThrowTime < throwDelay) return;
+
+        lastThrowTime = Time.time;
+        readyBombs--;
 
         GameObject bomb = Instantiate(bombPrefab, bombSpawnPoint.position, Quaternion.identity);
 

@@ -11358,9 +11358,9 @@ MonoBehaviour:
   powerText: {fileID: 1944564412}
   shieldText: {fileID: 1776645512}
   bombText: {fileID: 1419114325}
-  powerIcon: {fileID: 1569116738}
-  shieldIcon: {fileID: 1145488173}
-  bombIcon: {fileID: 1249511866}
+  powerBtn: {fileID: 1569116740}
+  shieldBtn: {fileID: 1145488175}
+  bombBtn: {fileID: 1249511868}
 --- !u!1001 &868003117
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21421,6 +21421,7 @@ MonoBehaviour:
   armorObject: {fileID: 408938455}
   bombPrefab: {fileID: 6066834810051169917, guid: dbd148ad4b488594e83dc8cdd95a1f82, type: 3}
   bombSpawnPoint: {fileID: 157552760}
+  throwDelay: 0.3
 --- !u!1001 &1696133644
 PrefabInstance:
   m_ObjectHideFlags: 0
