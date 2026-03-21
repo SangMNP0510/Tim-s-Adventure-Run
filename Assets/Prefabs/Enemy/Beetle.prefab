@@ -227,13 +227,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  pointA: {fileID: 0}
-  pointB: {fileID: 0}
+  movePoints:
+  - {fileID: 0}
+  - {fileID: 0}
   stepHeight: 0.2
   checkDistance: 0.1
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
 --- !u!70 &2442083942415629311
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

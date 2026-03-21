@@ -6,9 +6,8 @@ public class Beetle : MonoBehaviour
 {
     public float speed = 2f;
 
-    [Header("Move Range")]
-    public Transform pointA;
-    public Transform pointB;
+    [Header("Move Path")]
+    public List<Transform> movePoints;
 
     [Header("Step Climb")]
     public float stepHeight = 0.2f;
@@ -19,7 +18,7 @@ public class Beetle : MonoBehaviour
     private Animator anim;
     private CapsuleCollider2D col;
 
-    private bool movingRight = true;
+    private int currentIndex = 0;
     private bool isDead = false;
 
     void Start()
@@ -36,23 +35,31 @@ public class Beetle : MonoBehaviour
         Move();
     }
 
+    float GetDirection()
+    {
+        if (movePoints == null || movePoints.Count == 0) return 0;
+
+        Transform target = movePoints[currentIndex];
+        return target.position.x > transform.position.x ? 1 : -1;
+    }
+
     void Move()
     {
-        float direction = movingRight ? 1 : -1;
+        if (movePoints == null || movePoints.Count == 0) return;
+
+        float direction = GetDirection();
 
         HandleStepClimb(direction);
 
         rb.velocity = new Vector2(direction * speed, rb.velocity.y - 0.1f);
 
-        if (movingRight)
+        Transform target = movePoints[currentIndex];
+
+        if (Vector2.Distance(transform.position, target.position) < 0.1f)
         {
-            if (transform.position.x >= pointB.position.x)
-                Flip();
-        }
-        else
-        {
-            if (transform.position.x <= pointA.position.x)
-                Flip();
+            currentIndex++;
+            if (currentIndex >= movePoints.Count)
+                currentIndex = 0;
         }
     }
 
@@ -60,26 +67,11 @@ public class Beetle : MonoBehaviour
     {
         Bounds bounds = col.bounds;
 
-        Vector2 originLow = new Vector2(
-            bounds.center.x,
-            bounds.min.y + 0.05f
-        );
-
+        Vector2 originLow = new Vector2(bounds.center.x, bounds.min.y + 0.05f);
         Vector2 originHigh = originLow + Vector2.up * stepHeight;
 
-        RaycastHit2D hitLow = Physics2D.Raycast(
-            originLow,
-            Vector2.right * direction,
-            checkDistance,
-            groundLayer
-        );
-
-        RaycastHit2D hitHigh = Physics2D.Raycast(
-            originHigh,
-            Vector2.right * direction,
-            checkDistance,
-            groundLayer
-        );
+        RaycastHit2D hitLow = Physics2D.Raycast(originLow, Vector2.right * direction, checkDistance, groundLayer);
+        RaycastHit2D hitHigh = Physics2D.Raycast(originHigh, Vector2.right * direction, checkDistance, groundLayer);
 
         if (hitLow && !hitHigh)
         {
@@ -88,15 +80,6 @@ public class Beetle : MonoBehaviour
 
         Debug.DrawRay(originLow, Vector2.right * direction * checkDistance, Color.red);
         Debug.DrawRay(originHigh, Vector2.right * direction * checkDistance, Color.green);
-    }
-
-    void Flip()
-    {
-        movingRight = !movingRight;
-
-        Vector3 scale = transform.localScale;
-        scale.x *= -1;
-        transform.localScale = scale;
     }
 
     public bool IsDead()
