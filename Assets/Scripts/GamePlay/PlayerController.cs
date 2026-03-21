@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float jumpForce;
+    [SerializeField] private float moveSpeed = 6f;
+    [SerializeField] private float jumpForce = 15f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private float jumpHoldForce;
-    [SerializeField] private float jumpHoldTime;
-
-    private float jumpTimeCounter;
-    private bool isJumping;
 
     private bool isDead = false;
 
@@ -29,7 +24,6 @@ public class PlayerController : MonoBehaviour
     private Vector2 sittingSize;
     private Vector2 standingOffset;
     private Vector2 sittingOffset;
-    private bool isBouncing;
 
     private void Awake()
     {
@@ -77,43 +71,15 @@ public class PlayerController : MonoBehaviour
 
     private void HandleJump()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
+        if (isDead) return;
 
-        if (jumpPressed && isGrounded)
+        if (jumpPressed && isGrounded && !isSitting)
         {
-            StopSit();
-
-            isJumping = true;
-            jumpTimeCounter = jumpHoldTime;
-
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-
             jumpPressed = false;
         }
 
-        if (isJumping && jumpTimeCounter > 0)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpHoldForce);
-            jumpTimeCounter -= Time.deltaTime;
-        }
-        if (!isJumping && !isBouncing && rb.velocity.y > 0)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-        }
-    }
-
-    public void Bounce(float force)
-    {
-        isBouncing = true;
-        rb.velocity = new Vector2(rb.velocity.x, force);
-
-        StartCoroutine(ResetBounce());
-    }
-
-    IEnumerator ResetBounce()
-    {
-        yield return new WaitForSeconds(0.1f);
-        isBouncing = false;
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
     }
 
     private void UpdateAnimation()
@@ -145,24 +111,9 @@ public class PlayerController : MonoBehaviour
         moveInput = 0;
     }
 
-    public void JumpHold()
-    {
-        if (isDead) return;
-        if (!isGrounded) return;
-        isJumping = true;
-    }
-
-    public void JumpRelease()
-    {
-        isJumping = false;
-    }
-
     public void JumpButton()
     {
         if (isDead) return;
-
-        if (!isGrounded) return;
-
         jumpPressed = true;
     }
 
