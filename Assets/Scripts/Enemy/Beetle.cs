@@ -6,54 +6,80 @@ public class Beetle : MonoBehaviour
 {
     public float speed = 2f;
 
-    [Header("Move Range")]
-    public Transform pointA;
-    public Transform pointB;
+    [Header("Move Path")]
+    public List<Transform> movePoints;
+
+    [Header("Step Climb")]
+    public float stepHeight = 0.2f;
+    public float checkDistance = 0.15f;
+    public LayerMask groundLayer;
 
     private Rigidbody2D rb;
     private Animator anim;
+    private CapsuleCollider2D col;
 
-    private bool movingRight = true;
+    private int currentIndex = 0;
     private bool isDead = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        col = GetComponent<CapsuleCollider2D>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (isDead) return;
 
         Move();
     }
 
+    float GetDirection()
+    {
+        if (movePoints == null || movePoints.Count == 0) return 0;
+
+        Transform target = movePoints[currentIndex];
+        return target.position.x > transform.position.x ? 1 : -1;
+    }
+
     void Move()
     {
-        if (movingRight)
-        {
-            rb.velocity = new Vector2(speed, rb.velocity.y);
+        if (movePoints == null || movePoints.Count == 0) return;
 
-            if (transform.position.x >= pointB.position.x)
-                Flip();
-        }
-        else
-        {
-            rb.velocity = new Vector2(-speed, rb.velocity.y);
+        float direction = GetDirection();
 
-            if (transform.position.x <= pointA.position.x)
-                Flip();
+        HandleStepClimb(direction);
+
+        rb.velocity = new Vector2(direction * speed, rb.velocity.y - 0.1f);
+
+        Transform target = movePoints[currentIndex];
+
+        if (Vector2.Distance(transform.position, target.position) < 0.1f)
+        {
+            currentIndex++;
+            if (currentIndex >= movePoints.Count)
+                currentIndex = 0;
         }
     }
 
-    void Flip()
+    void HandleStepClimb(float direction)
     {
-        movingRight = !movingRight;
+        Bounds bounds = col.bounds;
 
-        Vector3 scale = transform.localScale;
-        scale.x *= -1;
-        transform.localScale = scale;
+        Vector2 originLow = new Vector2(bounds.center.x, bounds.min.y + 0.05f);
+        Vector2 originHigh = originLow + Vector2.up * stepHeight;
+
+        RaycastHit2D hitLow = Physics2D.Raycast(originLow, Vector2.right * direction, checkDistance, groundLayer);
+        RaycastHit2D hitHigh = Physics2D.Raycast(originHigh, Vector2.right * direction, checkDistance, groundLayer);
+
+        if (hitLow && !hitHigh)
+        {
+            rb.position += Vector2.up * stepHeight;
+        }
+
+        Debug.DrawRay(originLow, Vector2.right * direction * checkDistance, Color.red);
+        Debug.DrawRay(originHigh, Vector2.right * direction * checkDistance, Color.green);
     }
 
     public bool IsDead()

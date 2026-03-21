@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    [Header("Start Popup")]
+    [SerializeField] private GameObject startPopupUi;
+    private bool isGameStarted = false;
     private bool isPaused = false;
     private int score = 0;
 
@@ -59,6 +62,17 @@ public class GameManager : MonoBehaviour
 
         tempCoins = 0;
         UpdateCoinUI();
+        
+        startPopupUi.SetActive(true);
+        Time.timeScale = 0;
+        isGameStarted = false;
+    }
+
+    public void StartGame()
+    {
+        startPopupUi.SetActive(false);
+        Time.timeScale = 1;
+        isGameStarted = true;
     }
 
     public void PauseGame()
@@ -92,7 +106,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (isGameOver || isPaused) return;
+        if (isGameOver || isPaused || !isGameStarted) return;
 
         HandleTimer();
         UpdateProgress();
