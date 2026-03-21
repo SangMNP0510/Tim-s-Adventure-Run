@@ -6,11 +6,15 @@ public class PlayerCollision : MonoBehaviour
 {
     private GameManager gameManager;
     private Rigidbody2D rb;
+    private PlayerController player;
+    private PlayerSkillController skill;
 
     private void Awake()
     {
         gameManager = FindAnyObjectByType<GameManager>();
         rb = GetComponent<Rigidbody2D>();
+        player = GetComponent<PlayerController>();
+        skill = GetComponent<PlayerSkillController>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -26,8 +30,7 @@ public class PlayerCollision : MonoBehaviour
         }
         else if (collision.CompareTag("Trap"))
         {
-            GetComponent<PlayerController>().Die(false);
-
+            player.Die(false);
             StartCoroutine(DelayGameOver());
         }
     }
@@ -50,12 +53,24 @@ public class PlayerCollision : MonoBehaviour
         float playerY = transform.position.y;
         float enemyY = collision.transform.position.y;
 
+        if (skill != null && skill.IsShieldActive())
+        {
+            Destroy(collision.gameObject);
+            return;
+        }
+
+        if (skill != null && skill.IsPowerActive())
+        {
+            StartCoroutine(skill.PowerInvincible());
+            return;
+        }
+
         Snail snail = collision.gameObject.GetComponent<Snail>();
         if (snail != null)
         {
             if (snail.IsRolling())
             {
-                GetComponent<PlayerController>().Die(true);
+                player.Die(true);
                 StartCoroutine(DelayGameOver());
                 return;
             }
@@ -65,14 +80,12 @@ public class PlayerCollision : MonoBehaviour
                 if (playerY > enemyY + 0.5f && rb.velocity.y <= 0)
                 {
                     snail.Die();
-
-                    rb.velocity = new Vector2(rb.velocity.x, 10f);
-
+                    player.Bounce(10f);
                     return;
                 }
             }
 
-            GetComponent<PlayerController>().Die(true);
+            player.Die(true);
             StartCoroutine(DelayGameOver());
             return;
         }
@@ -85,19 +98,19 @@ public class PlayerCollision : MonoBehaviour
                 if (playerY > enemyY + 0.5f && rb.velocity.y <= 0)
                 {
                     beetle.Die();
-                    rb.velocity = new Vector2(rb.velocity.x, 8f);
+                    player.Bounce(8f);
                     return;
                 }
             }
 
-            GetComponent<PlayerController>().Die(true);
+            player.Die(true);
             StartCoroutine(DelayGameOver());
         }
     }
+
     IEnumerator DelayGameOver()
     {
         yield return new WaitForSeconds(1f);
-
         gameManager.GameOver();
     }
 }
