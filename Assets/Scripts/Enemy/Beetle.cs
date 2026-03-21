@@ -10,8 +10,14 @@ public class Beetle : MonoBehaviour
     public Transform pointA;
     public Transform pointB;
 
+    [Header("Step Climb")]
+    public float stepHeight = 0.2f;
+    public float checkDistance = 0.15f;
+    public LayerMask groundLayer;
+
     private Rigidbody2D rb;
     private Animator anim;
+    private CapsuleCollider2D col;
 
     private bool movingRight = true;
     private bool isDead = false;
@@ -20,9 +26,10 @@ public class Beetle : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        col = GetComponent<CapsuleCollider2D>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (isDead) return;
 
@@ -31,20 +38,56 @@ public class Beetle : MonoBehaviour
 
     void Move()
     {
+        float direction = movingRight ? 1 : -1;
+
+        HandleStepClimb(direction);
+
+        rb.velocity = new Vector2(direction * speed, rb.velocity.y - 0.1f);
+
         if (movingRight)
         {
-            rb.velocity = new Vector2(speed, rb.velocity.y);
-
             if (transform.position.x >= pointB.position.x)
                 Flip();
         }
         else
         {
-            rb.velocity = new Vector2(-speed, rb.velocity.y);
-
             if (transform.position.x <= pointA.position.x)
                 Flip();
         }
+    }
+
+    void HandleStepClimb(float direction)
+    {
+        Bounds bounds = col.bounds;
+
+        Vector2 originLow = new Vector2(
+            bounds.center.x,
+            bounds.min.y + 0.05f
+        );
+
+        Vector2 originHigh = originLow + Vector2.up * stepHeight;
+
+        RaycastHit2D hitLow = Physics2D.Raycast(
+            originLow,
+            Vector2.right * direction,
+            checkDistance,
+            groundLayer
+        );
+
+        RaycastHit2D hitHigh = Physics2D.Raycast(
+            originHigh,
+            Vector2.right * direction,
+            checkDistance,
+            groundLayer
+        );
+
+        if (hitLow && !hitHigh)
+        {
+            rb.position += Vector2.up * stepHeight;
+        }
+
+        Debug.DrawRay(originLow, Vector2.right * direction * checkDistance, Color.red);
+        Debug.DrawRay(originHigh, Vector2.right * direction * checkDistance, Color.green);
     }
 
     void Flip()

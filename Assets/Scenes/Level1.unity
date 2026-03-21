@@ -14648,7 +14648,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 77294734106453874, guid: a1c93457a4acacf43980a89798ece0c6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.53569
+      value: 14.513
       objectReference: {fileID: 0}
     - target: {fileID: 77294734106453874, guid: a1c93457a4acacf43980a89798ece0c6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -28328,7 +28328,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2632978867110854209, guid: 2dd42c2a160a0c140baa59ef787fa157, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.623188
+      value: 16.6
       objectReference: {fileID: 0}
     - target: {fileID: 2632978867110854209, guid: 2dd42c2a160a0c140baa59ef787fa157, type: 3}
       propertyPath: m_LocalPosition.y
@@ -28672,6 +28672,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1852538555273047884, guid: 84a8b7fb9171c5d4cab3f93c2fd7be48, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1852538555273047884, guid: 84a8b7fb9171c5d4cab3f93c2fd7be48, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4095288225810367272, guid: 84a8b7fb9171c5d4cab3f93c2fd7be48, type: 3}
       propertyPath: pointA
       value: 
