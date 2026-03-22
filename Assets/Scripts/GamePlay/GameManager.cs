@@ -6,6 +6,18 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Intro Effect")]
+    [SerializeField] private RectTransform cloudLeft;
+    [SerializeField] private RectTransform cloudRight;
+    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI levelNumberText;
+    [SerializeField] private GameObject PanelText;
+
+    [SerializeField] private float cloudMoveTime = 2f;
+    [SerializeField] private float textStayTime = 1f;
+
+    private Vector2 leftStartPos;
+    private Vector2 rightStartPos;
     public static GameManager Instance;
     [SerializeField] private GameObject startPopupUi;
     [SerializeField] private GameObject shopSkillUi;
@@ -77,8 +89,8 @@ public class GameManager : MonoBehaviour
 
         tempCoins = 0;
         UpdateCoinUI();
-        
-        startPopupUi.SetActive(true);
+        startPopupUi.SetActive(false);
+        shopSkillUi.SetActive(false);
         Time.timeScale = 0;
         isGameStarted = false;
         isPaused = true;
@@ -90,6 +102,49 @@ public class GameManager : MonoBehaviour
             string number = sceneName.Replace("Level", "");
             levelIndex = int.Parse(number);
         }
+
+        levelText.gameObject.SetActive(true);
+        levelNumberText.gameObject.SetActive(true);
+        PanelText.SetActive(true);
+        levelNumberText.text = "Level " + levelIndex;
+
+        leftStartPos = cloudLeft.anchoredPosition;
+        rightStartPos = cloudRight.anchoredPosition;
+
+        StartCoroutine(PlayIntroEffect());
+    }
+
+    IEnumerator PlayIntroEffect()
+    {
+        float time = 0;
+
+        Vector2 leftEnd = leftStartPos + Vector2.left * 1000f;
+        Vector2 rightEnd = rightStartPos + Vector2.right * 1000f;
+
+        while (time < cloudMoveTime)
+        {
+            time += Time.unscaledDeltaTime;
+            float t = time / cloudMoveTime;
+
+            cloudLeft.anchoredPosition = Vector2.Lerp(leftStartPos, leftEnd, t);
+            cloudRight.anchoredPosition = Vector2.Lerp(rightStartPos, rightEnd, t);
+
+            yield return null;
+        }
+
+        cloudLeft.gameObject.SetActive(false);
+        cloudRight.gameObject.SetActive(false);
+
+        yield return new WaitForSecondsRealtime(textStayTime);
+
+        levelText.gameObject.SetActive(false);
+        levelNumberText.gameObject.SetActive(false);
+        PanelText.SetActive(false);
+
+        startPopupUi.SetActive(true);
+
+        isPaused = true;
+        Time.timeScale = 0;
     }
 
     public void OpenShopSkill()
@@ -113,6 +168,7 @@ public class GameManager : MonoBehaviour
         if (isGameStarted) return;
         Debug.Log("START GAME CALLED !!!");
         startPopupUi.SetActive(false);
+        shopSkillUi.SetActive(false);
         isGameStarted = true;
         isPaused = false;
         Time.timeScale = 1;
