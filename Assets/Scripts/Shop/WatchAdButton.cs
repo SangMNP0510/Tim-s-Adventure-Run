@@ -23,11 +23,16 @@ public class WatchAdButton : MonoBehaviour
             return;
         }
 
-        ads.ShowRewardedAd(() =>
-        {
-            Debug.Log("Nhận 50 coins");
-
-            CoinManager.Instance.AddCoins(50);
-        });
+        ads.ShowRewardedAd(
+            () =>
+            {
+                Debug.Log("Nhận 50 coins");
+                CoinManager.Instance.AddCoins(50);
+            },
+            () =>
+            {
+                Debug.Log("Ads đóng");
+            }
+        );
     }
 }
