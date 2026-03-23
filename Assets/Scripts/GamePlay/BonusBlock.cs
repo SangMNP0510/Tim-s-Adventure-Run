@@ -9,6 +9,8 @@ public class BonusBlock : MonoBehaviour
     private bool used = false;
     private Animator animator;
     private SpriteRenderer sr;
+    [SerializeField] private GameObject skillPrefab;
+    [SerializeField] private Transform spawnPoint;
 
     void Start()
     {
@@ -33,11 +35,21 @@ public class BonusBlock : MonoBehaviour
     }
 
     void HitBlock()
+{
+    used = true;
+
+    animator.enabled = false;
+    sr.sprite = usedSprite;
+
+    if (skillPrefab != null)
     {
-        used = true;
+        GameObject skill = Instantiate(skillPrefab, spawnPoint.position, Quaternion.identity);
 
-        animator.enabled = false;
-
-        sr.sprite = usedSprite;
+        Rigidbody2D rb = skill.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.velocity = new Vector2(0, 5f);
+        }
     }
+}
 }

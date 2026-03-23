@@ -1414,6 +1414,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 8594296066629958768, guid: 2307b0a50530a784d9d8c9c2723b6471, type: 3}
+      propertyPath: skillPrefab
+      value: 
+      objectReference: {fileID: 3072158501697456358, guid: 2e9fc0f02f7d9ad4aac243537536d74d, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -33137,6 +33141,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4370991093621844263, guid: 2307b0a50530a784d9d8c9c2723b6471, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.527
+      objectReference: {fileID: 0}
     - target: {fileID: 5710530599179437189, guid: 2307b0a50530a784d9d8c9c2723b6471, type: 3}
       propertyPath: m_Name
       value: bonusblock_0
@@ -33145,6 +33153,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 8594296066629958768, guid: 2307b0a50530a784d9d8c9c2723b6471, type: 3}
+      propertyPath: skillPrefab
+      value: 
+      objectReference: {fileID: 3072158501697456358, guid: f57a54a1f0aadd54db1a1a37a7bfa0e1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
