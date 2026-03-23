@@ -67,3 +67,45 @@ UpgradeLog.htm.meta
 !/[Aa]ssets/
 !/[Pp]ackages/
 !/[Pp]rojectSettings/
+
+# Firebase config (DO NOT COMMIT)
+Assets/google-services.json
+Assets/StreamingAssets/google-services-desktop.json
+
+# Firebase (ignore cả meta)
+google-services*.json*
+
+# ================= FIREBASE / ANDROID RESOLVER =================
+
+# Firebase full SDK (không cần commit)
+Assets/Firebase/
+
+# Generated từ External Dependency Manager (rất nặng)
+Assets/GeneratedLocalRepo/
+
+# Android build artifacts
+*.aar
+*.srcaar
+
+# iOS / tvOS native libs (to, không cần)
+Assets/Plugins/iOS/
+Assets/Plugins/tvOS/
+
+# Android native libs (nếu có)
+Assets/Plugins/Android/*.aar
+Assets/Plugins/Android/*.srcaar
+
+# Firebase native binaries (tránh sót)
+*.so
+*.bundle
+*.a
+
+# ================= OPTIONAL (khuyên dùng) =================
+
+# Gradle build cache
+.gradle/
+
+# Unity Android build templates (nếu không custom sâu thì ignore)
+# (nếu team bạn có chỉnh thì comment lại)
+# Assets/Plugins/Android/mainTemplate.gradle
+# Assets/Plugins/Android/settingsTemplate.gradle

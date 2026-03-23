@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,7 +6,10 @@ using UnityEngine.UI;
 public class LoadingManager : MonoBehaviour
 {
     public Slider loadingSlider;
-    public string sceneToLoad;
+
+    [Header("Scene Names")]
+    public string profileSceneName = "Profile";
+    public string mainMenuSceneName = "MainMenu";
 
     private void Start()
     {
@@ -16,13 +18,20 @@ public class LoadingManager : MonoBehaviour
 
     IEnumerator LoadAsync()
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneToLoad);
+        string targetScene = profileSceneName;
+
+        if (PlayerProfileManager.Instance != null &&
+            PlayerProfileManager.Instance.HasProfile())
+        {
+            targetScene = mainMenuSceneName;
+        }
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(targetScene);
         operation.allowSceneActivation = false;
 
         while (!operation.isDone)
         {
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
-
             loadingSlider.value = progress;
 
             if (operation.progress >= 0.9f)
