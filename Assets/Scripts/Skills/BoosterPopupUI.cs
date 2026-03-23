@@ -109,7 +109,7 @@ public class BoosterPopupUI : MonoBehaviour
             {
                 Debug.Log("Ads closed → start game");
 
-                GameManager.Instance.StartGame();
+                StartCoroutine(WaitForAdClosed());
             }
         );
     }

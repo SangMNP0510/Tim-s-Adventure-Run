@@ -53,21 +53,38 @@ public class RewardUIHandler : MonoBehaviour
         }
 
         ads.ShowRewardedAd(
-            () =>
-            {
-                CoinManager.Instance.AddCoins(50);
-            },
-            () =>
-            {
-                popup.SetActive(false);
-
-                PlayerPrefs.SetString(LAST_AD_TIME_KEY, DateTime.Now.Ticks.ToString());
-                PlayerPrefs.Save();
-
-                openPopupButton.gameObject.SetActive(false);
-
-                Debug.Log("Đã nhận 50 coin + cooldown 24h");
-            }
+        () =>
+        {
+            CoinManager.Instance.AddCoins(50);
+        },
+        () =>
+        {
+            StartCoroutine(HandleAfterAd());
+        }
         );
+    }
+
+    IEnumerator HandleAfterAd()
+    {
+        yield return null;
+
+        while (!Application.isFocused)
+        {
+            yield return null;
+        }
+
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        if (this != null && gameObject.activeInHierarchy)
+        {
+            popup.SetActive(false);
+
+            PlayerPrefs.SetString(LAST_AD_TIME_KEY, DateTime.Now.Ticks.ToString());
+            PlayerPrefs.Save();
+
+            openPopupButton.gameObject.SetActive(false);
+
+            Debug.Log("Đã nhận 50 coin + cooldown 24h");
+        }
     }
 }
