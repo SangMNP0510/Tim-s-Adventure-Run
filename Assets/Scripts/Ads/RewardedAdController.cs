@@ -74,6 +74,8 @@ public class RewardedAdController : MonoBehaviour
         {
             Debug.Log("Ad not ready");
             LoadRewardedAd();
+            onReward?.Invoke();
+            onClose?.Invoke();
         }
     }
 
