@@ -52,22 +52,22 @@ public class RewardUIHandler : MonoBehaviour
             return;
         }
 
-        ads.ShowRewardedAd(() =>
-        {
-            // 🎯 1. Cộng coin
-            CoinManager.Instance.AddCoins(50);
+        ads.ShowRewardedAd(
+            () =>
+            {
+                CoinManager.Instance.AddCoins(50);
+            },
+            () =>
+            {
+                popup.SetActive(false);
 
-            // 🎯 2. Ẩn popup
-            popup.SetActive(false);
+                PlayerPrefs.SetString(LAST_AD_TIME_KEY, DateTime.Now.Ticks.ToString());
+                PlayerPrefs.Save();
 
-            // 🎯 3. Lưu thời gian
-            PlayerPrefs.SetString(LAST_AD_TIME_KEY, DateTime.Now.Ticks.ToString());
-            PlayerPrefs.Save();
+                openPopupButton.gameObject.SetActive(false);
 
-            // 🎯 4. Ẩn button trong 24h
-            openPopupButton.gameObject.SetActive(false);
-
-            Debug.Log("Đã nhận 50 coin + cooldown 24h");
-        });
+                Debug.Log("Đã nhận 50 coin + cooldown 24h");
+            }
+        );
     }
 }

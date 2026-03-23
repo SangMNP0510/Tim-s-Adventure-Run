@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("LevelManager START");
         int unlockedLevel = PlayerPrefs.GetInt("UnlockedLevel", 1);
 
         foreach (Transform child in levelParent)

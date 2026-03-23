@@ -2,12 +2,25 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Intro Effect")]
+    [SerializeField] private RectTransform cloudLeft;
+    [SerializeField] private RectTransform cloudRight;
+    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI levelNumberText;
+    [SerializeField] private GameObject PanelText;
+
+    [SerializeField] private float cloudMoveTime = 2f;
+    [SerializeField] private float textStayTime = 1f;
+
+    private Vector2 leftStartPos;
+    private Vector2 rightStartPos;
     public static GameManager Instance;
-    [Header("Start Popup")]
     [SerializeField] private GameObject startPopupUi;
+    [SerializeField] private GameObject shopSkillUi;
     private bool isGameStarted = false;
     private bool isPaused = false;
     private int score = 0;
@@ -23,6 +36,20 @@ public class GameManager : MonoBehaviour
     private bool hasRevived = false;
 
     private bool isGameOver = false;
+
+    [Header("Win UI")]
+    [SerializeField] private GameObject winUi;
+    [SerializeField] private TextMeshProUGUI winScoreText;
+    [SerializeField] private Image starImage;
+    [SerializeField] private Sprite star1;
+    [SerializeField] private Sprite star2;
+    [SerializeField] private Sprite star3;
+    [SerializeField] private GameObject newHighscoreText;
+
+    [Header("Level Config")]
+    [SerializeField] private int levelIndex = 1;
+    [SerializeField] private int star1Score = 2000;
+    [SerializeField] private int star2Score = 2500;
 
     private Vector3 lastCheckpointPos;
     private GameObject player;
@@ -62,17 +89,89 @@ public class GameManager : MonoBehaviour
 
         tempCoins = 0;
         UpdateCoinUI();
-        
-        startPopupUi.SetActive(true);
+        startPopupUi.SetActive(false);
+        shopSkillUi.SetActive(false);
         Time.timeScale = 0;
         isGameStarted = false;
+        isPaused = true;
+
+        string sceneName = SceneManager.GetActiveScene().name;
+
+        if (sceneName.StartsWith("Level"))
+        {
+            string number = sceneName.Replace("Level", "");
+            levelIndex = int.Parse(number);
+        }
+
+        levelText.gameObject.SetActive(true);
+        levelNumberText.gameObject.SetActive(true);
+        PanelText.SetActive(true);
+        levelNumberText.text = "Level " + levelIndex;
+
+        leftStartPos = cloudLeft.anchoredPosition;
+        rightStartPos = cloudRight.anchoredPosition;
+
+        StartCoroutine(PlayIntroEffect());
+    }
+
+    IEnumerator PlayIntroEffect()
+    {
+        float time = 0;
+
+        Vector2 leftEnd = leftStartPos + Vector2.left * 1000f;
+        Vector2 rightEnd = rightStartPos + Vector2.right * 1000f;
+
+        while (time < cloudMoveTime)
+        {
+            time += Time.unscaledDeltaTime;
+            float t = time / cloudMoveTime;
+
+            cloudLeft.anchoredPosition = Vector2.Lerp(leftStartPos, leftEnd, t);
+            cloudRight.anchoredPosition = Vector2.Lerp(rightStartPos, rightEnd, t);
+
+            yield return null;
+        }
+
+        cloudLeft.gameObject.SetActive(false);
+        cloudRight.gameObject.SetActive(false);
+
+        yield return new WaitForSecondsRealtime(textStayTime);
+
+        levelText.gameObject.SetActive(false);
+        levelNumberText.gameObject.SetActive(false);
+        PanelText.SetActive(false);
+
+        startPopupUi.SetActive(true);
+
+        isPaused = true;
+        Time.timeScale = 0;
+    }
+
+    public void OpenShopSkill()
+    {
+        shopSkillUi.SetActive(true);
+
+        isPaused = true;
+        Time.timeScale = 0;
+    }
+
+    public void CloseShopSkill()
+    {
+        shopSkillUi.SetActive(false);
+
+        isPaused = false;
+        Time.timeScale = 1;
     }
 
     public void StartGame()
     {
+        if (isGameStarted) return;
+        Debug.Log("START GAME CALLED !!!");
         startPopupUi.SetActive(false);
-        Time.timeScale = 1;
+        shopSkillUi.SetActive(false);
         isGameStarted = true;
+        isPaused = false;
+        Time.timeScale = 1;
     }
 
     public void PauseGame()
@@ -87,10 +186,17 @@ public class GameManager : MonoBehaviour
 
     public void ResumeGame()
     {
+        if (!isGameStarted) return;
         isPaused = false;
         Time.timeScale = 1;
 
         pauseUi.SetActive(false);
+    }
+
+    public void PauseForAds()
+    {
+        isPaused = true;
+        Time.timeScale = 0;
     }
 
     public void AddCoin(int amount)
@@ -106,7 +212,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (isGameOver || isPaused || !isGameStarted) return;
+        if (!isGameStarted) return;
+
+        if (isGameOver || isPaused) return;
 
         HandleTimer();
         UpdateProgress();
@@ -266,7 +374,28 @@ public class GameManager : MonoBehaviour
 
     public void WinGame()
     {
+        if (isGameOver) return;
+
+        isGameOver = true;
+
+        StartCoroutine(HandleWin());
+    }
+
+    IEnumerator HandleWin()
+    {
         Time.timeScale = 0;
+
+        SpriteRenderer sr = player.GetComponent<SpriteRenderer>();
+
+        float t = 0;
+        while (t < 1f)
+        {
+            t += Time.unscaledDeltaTime;
+            sr.color = new Color(1, 1, 1, 1 - t);
+            yield return null;
+        }
+
+        player.SetActive(false);
 
         if (tempCoins > 0)
         {
@@ -274,6 +403,58 @@ public class GameManager : MonoBehaviour
             tempCoins = 0;
         }
 
-        // show win UI
+        ShowWinUI();
+    }
+
+    void ShowWinUI()
+    {
+        winUi.SetActive(true);
+
+        winScoreText.text = score.ToString();
+
+        int starCount = CalculateStars(score);
+        Debug.Log("SAVE STAR: Level " + levelIndex + " = " + starCount);
+
+        if (starCount == 1) starImage.sprite = star1;
+        else if (starCount == 2) starImage.sprite = star2;
+        else starImage.sprite = star3;
+
+        int oldScore = PlayerPrefs.GetInt("LevelScore_" + levelIndex, 0);
+        int oldStar = PlayerPrefs.GetInt("LevelStar_" + levelIndex, 0);
+
+        if (score > oldScore)
+        {
+            PlayerPrefs.SetInt("LevelScore_" + levelIndex, score);
+            newHighscoreText.SetActive(true);
+        }
+        else
+        {
+            newHighscoreText.SetActive(false);
+        }
+
+        PlayerPrefs.SetInt("LevelStar_" + levelIndex, starCount);
+
+        int unlocked = PlayerPrefs.GetInt("UnlockedLevel", 1);
+        if (levelIndex >= unlocked)
+        {
+            PlayerPrefs.SetInt("UnlockedLevel", levelIndex + 1);
+        }
+
+        PlayerPrefs.Save();
+    }
+
+    int CalculateStars(int score)
+    {
+        if (score <= star1Score) return 1;
+        if (score <= star2Score) return 2;
+        return 3;
+    }
+
+    public void NextLevel()
+    {
+        Time.timeScale = 1;
+
+        LevelLoader.selectedLevel = levelIndex + 1;
+        SceneManager.LoadScene("LoadingMap");
     }
 }
