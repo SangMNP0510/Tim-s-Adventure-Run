@@ -183,6 +183,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   groundCheck: {fileID: 768704523381899067}
+  jumpHoldForce: 0
+  jumpHoldTime: 0
 --- !u!95 &6237375283298949095
 Animator:
   serializedVersion: 5
@@ -243,7 +245,7 @@ GameObject:
   - component: {fileID: 768704523381899067}
   m_Layer: 7
   m_Name: GroundCheck
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
