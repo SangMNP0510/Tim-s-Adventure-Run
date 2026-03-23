@@ -32,7 +32,23 @@ public class WatchAdButton : MonoBehaviour
             () =>
             {
                 Debug.Log("Ads đóng");
+
+                StartCoroutine(DelayAfterAd());
             }
         );
+    }
+
+    IEnumerator DelayAfterAd()
+    {
+        yield return null;
+
+        while (!Application.isFocused)
+        {
+            yield return null;
+        }
+
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        Debug.Log("Safe sau ads");
     }
 }
