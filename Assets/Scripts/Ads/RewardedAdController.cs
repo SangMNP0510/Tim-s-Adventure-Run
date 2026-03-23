@@ -49,32 +49,38 @@ public class RewardedAdController : MonoBehaviour
         });
     }
 
-    public void ShowRewardedAd(Action onReward)
+    public void ShowRewardedAd(Action onReward, Action onClose)
     {
         if (_rewardedAd != null && _rewardedAd.CanShowAd())
         {
-            Debug.Log("RewardedAdController: Showing rewarded ad.");
+            Debug.Log("Showing rewarded ad");
+
+            _rewardedAd.OnAdFullScreenContentClosed += () =>
+            {
+                Debug.Log("Ad CLOSED");
+
+                onClose?.Invoke();
+                LoadRewardedAd();
+            };
+
             _rewardedAd.Show(reward =>
             {
-                Debug.Log($"RewardedAdController: User earned reward: {reward.Amount} {reward.Type}");
+                Debug.Log("User earned reward");
+
                 onReward?.Invoke();
             });
         }
         else
         {
-            Debug.Log("RewardedAdController: Not ready, loading new one.");
+            Debug.Log("Ad not ready");
             LoadRewardedAd();
+            onReward?.Invoke();
+            onClose?.Invoke();
         }
     }
 
     private void RegisterEvents(RewardedAd ad)
     {
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            Debug.Log("RewardedAdController: Ad closed. Loading next one.");
-            LoadRewardedAd();
-        };
-
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
             Debug.LogError($"RewardedAdController: Failed to show. Reason: {error.GetMessage()}");
