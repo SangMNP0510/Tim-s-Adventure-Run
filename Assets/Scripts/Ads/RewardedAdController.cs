@@ -16,6 +16,9 @@ public class RewardedAdController : MonoBehaviour
 
     private RewardedAd _rewardedAd;
 
+    private Action _onReward;
+    private Action _onClose;
+
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -26,11 +29,9 @@ public class RewardedAdController : MonoBehaviour
     {
         if (_adUnitId == "unused")
         {
-            Debug.LogWarning("RewardedAdController: Unsupported platform.");
+            Debug.LogWarning("Unsupported platform.");
             return;
         }
-
-        Debug.Log("RewardedAdController: Requesting rewarded ad...");
 
         AdRequest request = new AdRequest();
 
@@ -38,11 +39,10 @@ public class RewardedAdController : MonoBehaviour
         {
             if (error != null)
             {
-                Debug.LogError($"RewardedAdController: Failed to load. Reason: {error.GetMessage()}");
+                Debug.LogError("Load fail: " + error.GetMessage());
                 return;
             }
 
-            Debug.Log("RewardedAdController: Rewarded ad loaded.");
             _rewardedAd = ad;
 
             RegisterEvents(_rewardedAd);
@@ -53,35 +53,48 @@ public class RewardedAdController : MonoBehaviour
     {
         if (_rewardedAd != null && _rewardedAd.CanShowAd())
         {
-            Debug.Log("Showing rewarded ad");
+            Debug.Log("Show ads");
 
-            _rewardedAd.OnAdFullScreenContentClosed += () =>
-            {
-                Debug.Log("Ad CLOSED");
+            _onReward = onReward;
+            _onClose = onClose;
 
-                onClose?.Invoke();
-                LoadRewardedAd();
-            };
+            _rewardedAd.OnAdFullScreenContentClosed -= HandleAdClosed;
+            _rewardedAd.OnAdFullScreenContentClosed += HandleAdClosed;
 
             _rewardedAd.Show(reward =>
             {
-                Debug.Log("User earned reward");
-
-                onReward?.Invoke();
+                Debug.Log("Reward received");
+                _onReward?.Invoke();
             });
         }
         else
         {
             Debug.Log("Ad not ready");
+
             LoadRewardedAd();
+
+            // fallback
+            _onReward?.Invoke();
+            _onClose?.Invoke();
         }
+    }
+
+    private void HandleAdClosed()
+    {
+        Debug.Log("Ad CLOSED");
+
+        _onClose?.Invoke();
+
+        _rewardedAd.OnAdFullScreenContentClosed -= HandleAdClosed;
+
+        LoadRewardedAd();
     }
 
     private void RegisterEvents(RewardedAd ad)
     {
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
-            Debug.LogError($"RewardedAdController: Failed to show. Reason: {error.GetMessage()}");
+            Debug.LogError("Show fail: " + error.GetMessage());
         };
     }
 

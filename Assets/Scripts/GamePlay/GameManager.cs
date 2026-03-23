@@ -311,15 +311,28 @@ public class GameManager : MonoBehaviour
     {
         StopAllCoroutines();
 
-        // TODO: sau này gắn ads ở đây
-
-        hasRevived = true;
-
-        reviveUi.SetActive(false);
-
-        StartCoroutine(RevivePlayer());
+        FindObjectOfType<RewardedAdController>().ShowRewardedAd(
+            onReward: () =>
+            {
+                hasRevived = true;
+            },
+            onClose: () =>
+            {
+                reviveUi.SetActive(false);
+                StartCoroutine(DelayRevive());
+            }
+        );
     }
 
+    IEnumerator DelayRevive()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        if (this != null && gameObject.activeInHierarchy)
+        {
+            StartCoroutine(RevivePlayer());
+        }
+    }
     IEnumerator RevivePlayer()
     {
         countdownUi.SetActive(true);
