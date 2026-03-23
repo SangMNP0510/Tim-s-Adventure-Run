@@ -319,11 +319,20 @@ public class GameManager : MonoBehaviour
             onClose: () =>
             {
                 reviveUi.SetActive(false);
-                StartCoroutine(RevivePlayer());
+                StartCoroutine(DelayRevive());
             }
         );
     }
 
+    IEnumerator DelayRevive()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        if (this != null && gameObject.activeInHierarchy)
+        {
+            StartCoroutine(RevivePlayer());
+        }
+    }
     IEnumerator RevivePlayer()
     {
         countdownUi.SetActive(true);
