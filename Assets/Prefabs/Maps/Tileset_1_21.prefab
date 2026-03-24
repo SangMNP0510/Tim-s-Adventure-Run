@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1775245590496370759}
   - component: {fileID: 8154084299629671832}
   - component: {fileID: 7758101500867680863}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Tileset_1_21
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
