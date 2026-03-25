@@ -353,7 +353,7 @@ MonoBehaviour:
   m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
-  m_CharacterLimit: 0
+  m_CharacterLimit: 16
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -805,7 +805,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0.86666673, g: 0.69803923, b: 0.5372549, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2413,7 +2413,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profileUIPanel: {fileID: 1702009206}
-  mainMenuSceneName: MainMenu
 --- !u!1 &1702009206
 GameObject:
   m_ObjectHideFlags: 0
@@ -2509,9 +2508,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameInput: {fileID: 175291838}
-  previewAvatar: {fileID: 1025691786}
+  previewAvatar: {fileID: 753599126}
   okButton: {fileID: 1945525424}
-  avatarContainer: {fileID: 1230114807}
+  avatars:
+  - button: {fileID: 1895001500}
+    image: {fileID: 355061764}
+  - button: {fileID: 2142100613}
+    image: {fileID: 1112359841}
+  - button: {fileID: 2135078283}
+    image: {fileID: 1959342753}
+  - button: {fileID: 1179801269}
+    image: {fileID: 397397853}
+  - button: {fileID: 281304485}
+    image: {fileID: 1519482812}
+  - button: {fileID: 1607486787}
+    image: {fileID: 1746294815}
+  mainMenuSceneName: MainMenu
 --- !u!1 &1746294813
 GameObject:
   m_ObjectHideFlags: 0
@@ -3302,7 +3314,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5529412, g: 0.3803922, b: 0.21176472, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

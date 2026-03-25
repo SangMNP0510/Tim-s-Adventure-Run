@@ -37,6 +37,7 @@ public class BonusBlock : MonoBehaviour
     void HitBlock()
 {
     used = true;
+    AchievementManager.Instance.AddProgress("block");
 
     animator.enabled = false;
     sr.sprite = usedSprite;
