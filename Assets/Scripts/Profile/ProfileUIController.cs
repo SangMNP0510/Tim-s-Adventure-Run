@@ -7,16 +7,17 @@ public class ProfileUIController : MonoBehaviour
 {
     [Header("UI")]
     public TMP_InputField nameInput;
-    public Image previewAvatar; // FrameAv
+    public Image previewAvatar;
     public Button okButton;
 
-    [Header("Avatar Root")]
-    public Transform avatarContainer; // Content
+    [Header("Avatar List")]
+    public AvatarItem[] avatars;
 
     [Header("Scene")]
     public string mainMenuSceneName = "MainMenu";
 
     private int selectedAvatarIndex = -1;
+    private int currentSelected = -1;
 
     void Start()
     {
@@ -28,27 +29,15 @@ public class ProfileUIController : MonoBehaviour
 
     void SetupAvatars()
     {
-        int index = 0;
-
-        foreach (Transform child in avatarContainer.GetComponentsInChildren<Transform>())
+        for (int i = 0; i < avatars.Length; i++)
         {
-            Button btn = child.GetComponent<Button>();
+            int index = i;
 
-            if (btn != null && child.name.Contains("Frame_Btn"))
+            avatars[i].button.onClick.RemoveAllListeners();
+            avatars[i].button.onClick.AddListener(() =>
             {
-                Image img = child.Find("Av")?.GetComponent<Image>();
-
-                if (img == null) continue;
-
-                int currentIndex = index;
-
-                btn.onClick.AddListener(() =>
-                {
-                    SelectAvatar(currentIndex, img.sprite);
-                });
-
-                index++;
-            }
+                SelectAvatar(index, avatars[index].image.sprite);
+            });
         }
     }
 
@@ -56,6 +45,14 @@ public class ProfileUIController : MonoBehaviour
     {
         selectedAvatarIndex = index;
         previewAvatar.sprite = sprite;
+
+        if (currentSelected >= 0)
+        {
+            avatars[currentSelected].button.transform.localScale = Vector3.one;
+        }
+
+        avatars[index].button.transform.localScale = Vector3.one * 1.2f;
+        currentSelected = index;
 
         Validate();
     }
@@ -76,6 +73,7 @@ public class ProfileUIController : MonoBehaviour
         string name = nameInput.text;
 
         PlayerProfileManager.Instance.SaveProfile(name, selectedAvatarIndex);
+
         if (PlayerInformationService.Instance != null)
         {
             _ = PlayerInformationService.Instance.SavePlayer();
