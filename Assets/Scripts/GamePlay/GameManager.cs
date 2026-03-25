@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
@@ -266,6 +266,20 @@ public class GameManager : MonoBehaviour
         UpdateScore();
     }
 
+    public static int GetTotalScore()
+    {
+        int total = 0;
+        int unlockedLevel = PlayerPrefs.GetInt("UnlockedLevel", 1);
+        int maxLevel = Mathf.Max(1, unlockedLevel);
+
+        for (int i = 1; i <= maxLevel; i++)
+        {
+            total += PlayerPrefs.GetInt("LevelScore_" + i, 0);
+        }
+
+        return total;
+    }
+
     private void UpdateScore()
     {
         scoreText.text = score.ToString();
@@ -454,6 +468,11 @@ public class GameManager : MonoBehaviour
         }
 
         PlayerPrefs.Save();
+
+        if (PlayerInformationService.Instance != null)
+        {
+            _ = PlayerInformationService.Instance.SubmitScore(levelIndex, score);
+        }
     }
 
     int CalculateStars(int score)

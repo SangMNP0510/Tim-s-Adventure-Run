@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
@@ -76,6 +76,10 @@ public class ProfileUIController : MonoBehaviour
         string name = nameInput.text;
 
         PlayerProfileManager.Instance.SaveProfile(name, selectedAvatarIndex);
+        if (PlayerInformationService.Instance != null)
+        {
+            _ = PlayerInformationService.Instance.SavePlayer();
+        }
 
         SceneManager.LoadScene(mainMenuSceneName);
     }
