@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GoogleMobileAds.Api;
+using UnityEngine.SceneManagement;
 
 public class BannerAdController : MonoBehaviour
 {
@@ -15,15 +16,62 @@ public class BannerAdController : MonoBehaviour
 
     private BannerView _bannerView;
     private ScreenOrientation _currentOrientation;
+    [Header("Scenes Allow Banner")]
+    public string[] allowedScenes;
 
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
         _currentOrientation = Screen.orientation;
         Debug.Log($"BannerAdController: Initial orientation = {_currentOrientation}");
 
         CreateAndLoadBanner();
+    }
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("Scene loaded: " + scene.name);
+
+        bool allow = false;
+
+        foreach (var s in allowedScenes)
+        {
+            if (scene.name == s)
+            {
+                allow = true;
+                break;
+            }
+        }
+
+        if (allow)
+        {
+            ShowBanner();
+        }
+        else
+        {
+            HideBanner();
+        }
+    }
+
+    public void ShowBanner()
+    {
+        if (_bannerView == null)
+        {
+            CreateAndLoadBanner();
+        }
+        else
+        {
+            _bannerView.Show();
+        }
+    }
+
+    public void HideBanner()
+    {
+        if (_bannerView != null)
+        {
+            _bannerView.Hide();
+        }
     }
 
     private void Update()
@@ -80,6 +128,7 @@ public class BannerAdController : MonoBehaviour
 
     private void OnDestroy()
     {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
         if (_bannerView != null)
         {
             _bannerView.Destroy();

@@ -88,6 +88,8 @@ public class PlayerCollision : MonoBehaviour
                 {
                     snail.Die();
                     player.Bounce(10f);
+                    ScoreService.Instance.AddScore(ScoreEventType.Enemy);
+                    AchievementManager.Instance.AddProgress("kill");
                     return;
                 }
             }
@@ -106,6 +108,8 @@ public class PlayerCollision : MonoBehaviour
                 {
                     beetle.Die();
                     player.Bounce(8f);
+                    ScoreService.Instance.AddScore(ScoreEventType.Enemy);
+                    AchievementManager.Instance.AddProgress("kill");
                     return;
                 }
             }

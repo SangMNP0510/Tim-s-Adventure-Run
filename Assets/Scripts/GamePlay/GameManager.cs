@@ -436,6 +436,7 @@ public class GameManager : MonoBehaviour
     void ShowWinUI()
     {
         winUi.SetActive(true);
+        AchievementManager.Instance.AddProgress("level");
 
         winScoreText.text = score.ToString();
 
