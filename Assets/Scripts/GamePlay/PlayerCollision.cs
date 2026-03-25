@@ -23,7 +23,14 @@ public class PlayerCollision : MonoBehaviour
         {
             if (!collision.gameObject.activeInHierarchy) return;
 
-            gameManager.AddScore(50);
+            if (ScoreService.Instance != null)
+            {
+                ScoreService.Instance.AddScore(ScoreEventType.Coin);
+            }
+            else
+            {
+                gameManager.AddScore(50);
+            }
             gameManager.AddCoin(1);
 
             CollectCoinEffect(collision.gameObject);
@@ -81,6 +88,8 @@ public class PlayerCollision : MonoBehaviour
                 {
                     snail.Die();
                     player.Bounce(10f);
+                    ScoreService.Instance.AddScore(ScoreEventType.Enemy);
+                    AchievementManager.Instance.AddProgress("kill");
                     return;
                 }
             }
@@ -99,6 +108,8 @@ public class PlayerCollision : MonoBehaviour
                 {
                     beetle.Die();
                     player.Bounce(8f);
+                    ScoreService.Instance.AddScore(ScoreEventType.Enemy);
+                    AchievementManager.Instance.AddProgress("kill");
                     return;
                 }
             }

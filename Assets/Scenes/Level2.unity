@@ -4334,7 +4334,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1190386076301825448, guid: 291df87642d4f7c42ae342aaf91e0960, type: 3}
       propertyPath: m_SortingOrder
-      value: -3
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4904,6 +4904,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bonusblock_0
       objectReference: {fileID: 0}
+    - target: {fileID: 8594296066629958768, guid: 2307b0a50530a784d9d8c9c2723b6471, type: 3}
+      propertyPath: skillPrefab
+      value: 
+      objectReference: {fileID: 1116771782078277698, guid: e27b92dc314c99747998c76512832ab9, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9071,7 +9075,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1190386076301825448, guid: 291df87642d4f7c42ae342aaf91e0960, type: 3}
       propertyPath: m_SortingOrder
-      value: -2
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20259,6 +20263,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bonusblock_0
       objectReference: {fileID: 0}
+    - target: {fileID: 8594296066629958768, guid: 2307b0a50530a784d9d8c9c2723b6471, type: 3}
+      propertyPath: skillPrefab
+      value: 
+      objectReference: {fileID: 1116771782078277698, guid: e27b92dc314c99747998c76512832ab9, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26374,7 +26382,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1190386076301825448, guid: 291df87642d4f7c42ae342aaf91e0960, type: 3}
       propertyPath: m_SortingOrder
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -28420,6 +28428,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bonusblock_0 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8594296066629958768, guid: 2307b0a50530a784d9d8c9c2723b6471, type: 3}
+      propertyPath: skillPrefab
+      value: 
+      objectReference: {fileID: 3072158501697456358, guid: 2a22aed05e5de01499763be3244b196f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -28544,6 +28556,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bonusblock_0
       objectReference: {fileID: 0}
+    - target: {fileID: 8594296066629958768, guid: 2307b0a50530a784d9d8c9c2723b6471, type: 3}
+      propertyPath: skillPrefab
+      value: 
+      objectReference: {fileID: 1116771782078277698, guid: e27b92dc314c99747998c76512832ab9, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -31985,6 +32001,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bonusblock_0
       objectReference: {fileID: 0}
+    - target: {fileID: 8594296066629958768, guid: 2307b0a50530a784d9d8c9c2723b6471, type: 3}
+      propertyPath: skillPrefab
+      value: 
+      objectReference: {fileID: 3072158501697456358, guid: 2a22aed05e5de01499763be3244b196f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -33778,6 +33798,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bonusblock_0
       objectReference: {fileID: 0}
+    - target: {fileID: 8594296066629958768, guid: 2307b0a50530a784d9d8c9c2723b6471, type: 3}
+      propertyPath: skillPrefab
+      value: 
+      objectReference: {fileID: 3072158501697456358, guid: f57a54a1f0aadd54db1a1a37a7bfa0e1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -36678,7 +36702,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1190386076301825448, guid: 291df87642d4f7c42ae342aaf91e0960, type: 3}
       propertyPath: m_SortingOrder
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -36938,7 +36962,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1190386076301825448, guid: 291df87642d4f7c42ae342aaf91e0960, type: 3}
       propertyPath: m_SortingOrder
-      value: -2
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
