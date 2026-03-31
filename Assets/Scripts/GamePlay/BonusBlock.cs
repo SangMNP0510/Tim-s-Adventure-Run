@@ -35,22 +35,22 @@ public class BonusBlock : MonoBehaviour
     }
 
     void HitBlock()
-{
-    used = true;
-    AchievementManager.Instance.AddProgress("block");
-
-    animator.enabled = false;
-    sr.sprite = usedSprite;
-
-    if (skillPrefab != null)
     {
-        GameObject skill = Instantiate(skillPrefab, spawnPoint.position, Quaternion.identity);
+        used = true;
+        AchievementManager.Instance.AddProgress("block");
 
-        Rigidbody2D rb = skill.GetComponent<Rigidbody2D>();
-        if (rb != null)
+        animator.enabled = false;
+        sr.sprite = usedSprite;
+
+        if (skillPrefab != null)
         {
-            rb.velocity = new Vector2(0, 5f);
+            GameObject skill = Instantiate(skillPrefab, spawnPoint.position, Quaternion.identity);
+
+            Rigidbody2D rb = skill.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.velocity = new Vector2(0, 5f);
+            }
         }
     }
-}
 }

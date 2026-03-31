@@ -8,8 +8,8 @@ public class SoundButtonUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     public Sprite soundOffSprite;
 
     [Header("Press Effect")]
-    public float pressedScale;   
-    public float darkenAmount;  
+    public float pressedScale;
+    public float darkenAmount;
 
     private Image buttonImage;
     private Vector3 originalScale;
