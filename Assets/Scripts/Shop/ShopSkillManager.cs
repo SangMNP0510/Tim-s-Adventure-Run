@@ -4,7 +4,6 @@ public class ShopSkillManager : MonoBehaviour
 {
     public ShopItemSkillUI itemPrefab;
     public Transform content;
-
     public Sprite powerIcon;
     public Sprite bombIcon;
     public Sprite shieldIcon;
