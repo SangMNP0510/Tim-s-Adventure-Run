@@ -19,7 +19,7 @@ public class LevelLoader : MonoBehaviour
         operation.allowSceneActivation = false;
 
         float timer = 0f;
-        float minTime = 2f; 
+        float minTime = 2f;
 
         while (!operation.isDone)
         {

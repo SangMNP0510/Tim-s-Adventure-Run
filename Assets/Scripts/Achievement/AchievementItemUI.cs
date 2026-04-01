@@ -19,8 +19,24 @@ public class AchievementItemUI : MonoBehaviour
         progressText.text = ach.current + "/" + ach.target;
         rewardText.text = ach.reward.ToString();
 
-        claimButton.gameObject.SetActive(ach.isCompleted && !ach.isClaimed);
-        claimButton.interactable = !ach.isClaimed;
+        if (ach.isClaimed)
+        {
+            claimButton.gameObject.SetActive(true);
+            claimButton.interactable = false;
+            claimButton.GetComponentInChildren<TMP_Text>().text = "Claimed";
+            claimButton.image.color = Color.gray;
+        }
+        else if (ach.isCompleted)
+        {
+            claimButton.gameObject.SetActive(true);
+            claimButton.interactable = true;
+            claimButton.GetComponentInChildren<TMP_Text>().text = "Claim";
+            claimButton.image.color = Color.white;
+        }
+        else
+        {
+            claimButton.gameObject.SetActive(false);
+        }
 
         claimButton.onClick.RemoveAllListeners();
         claimButton.onClick.AddListener(OnClaim);
